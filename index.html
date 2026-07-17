@@ -1,53 +1,491 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Test Page</title>
+    <title id="pageTitle">Blog · Abbasali Rezaei</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Simple styling to make it look nice */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+            background-color: #F8F9FC;
+            color: #111827;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        html[lang="fa"] body,
+        html[lang="fa"] .hero__badge,
+        html[lang="fa"] h1, html[lang="fa"] h2, html[lang="fa"] h3, html[lang="fa"] h4,
+        html[lang="fa"] p, html[lang="fa"] li, html[lang="fa"] a, html[lang="fa"] button {
+            font-family: 'Vazirmatn', 'Poppins', sans-serif;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* ----- LANG SWITCH ----- */
+        .lang-switch-wrap { display: flex; justify-content: flex-end; padding-top: 1.5rem; }
+        .lang-switch {
+            display: inline-flex;
+            background: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 40px;
+            padding: 0.25rem;
+            gap: 0.25rem;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+        }
+        .lang-switch button {
+            font-family: 'Poppins', sans-serif;
+            border: none;
+            background: transparent;
+            color: #6B7280;
+            font-weight: 500;
+            font-size: 0.85rem;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        html[lang="fa"] .lang-switch button { font-family: 'Vazirmatn', 'Poppins', sans-serif; }
+        .lang-switch button.active { background: #7C3AED; color: #fff; }
+
+        /* ----- HERO ----- */
+        .hero { padding: 3rem 0 4rem; text-align: center; }
+        .hero__badge {
+            display: inline-block;
+            background: rgba(124, 58, 237, 0.08);
+            color: #7C3AED;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            color: #111827;
+            margin-bottom: 0.75rem;
+        }
+        html[lang="fa"] .hero h1 { letter-spacing: 0; }
+        .hero h1 span {
+            background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero__sub {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #6B7280;
+            max-width: 540px;
+            margin: 0 auto 2.5rem;
+        }
+        .hero__actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.75rem 2rem;
+            border-radius: 60px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        .btn--primary {
+            background: #7C3AED;
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.25);
+        }
+        .btn--primary:hover { background: #6D28D9; transform: scale(1.02); box-shadow: 0 12px 28px rgba(124, 58, 237, 0.35); }
+        .btn--secondary {
+            background: transparent;
+            color: #111827;
+            border: 1px solid #E5E7EB;
+        }
+        .btn--secondary:hover { background: rgba(124, 58, 237, 0.05); border-color: #7C3AED; transform: scale(1.02); }
+        .btn--ghost {
+            background: transparent;
+            color: #7C3AED;
+            padding: 0.5rem 0;
+            font-weight: 500;
+            border-radius: 0;
+            border-bottom: 1.5px solid transparent;
+        }
+        .btn--ghost:hover { border-bottom-color: #7C3AED; transform: none; }
+        html[dir="rtl"] .btn i.fa-arrow-right { transform: scaleX(-1); }
+
+        /* ----- BLOG SECTION ----- */
+        .blog { padding: 2rem 0 4rem; }
+        .blog__header { text-align: center; margin-bottom: 3.5rem; }
+        .blog__header h2 { font-size: 2.2rem; font-weight: 600; letter-spacing: -0.02em; color: #111827; }
+        .blog__header p { color: #6B7280; font-weight: 400; margin-top: 0.25rem; }
+
+        .blog__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .blog-card {
+            background: #FFFFFF;
+            border-radius: 28px;
+            padding: 1.5rem 1.5rem 1.8rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(229, 231, 235, 0.5);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: default;
+            display: flex;
+            flex-direction: column;
+        }
+        .blog-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06), 0 8px 20px rgba(124, 58, 237, 0.06);
+            border-color: #d5c4ff;
+        }
+        .blog-card__image {
+            width: 100%;
+            height: 160px;
+            background: #E5E7EB;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9CA3AF;
+            font-size: 2.5rem;
+        }
+        .blog-card__image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .blog-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: #111827;
+        }
+        .blog-card .meta {
+            font-size: 0.8rem;
+            color: #8B8FA0;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .blog-card .meta i { color: #7C3AED; }
+        .blog-card p {
+            color: #6B7280;
+            font-size: 0.95rem;
+            font-weight: 400;
+            line-height: 1.5;
+            margin-bottom: 1.2rem;
+            flex: 1;
+        }
+        .blog-card .btn--ghost {
+            align-self: flex-start;
+            margin-top: 0.25rem;
+            font-size: 0.9rem;
+        }
+        html[dir="rtl"] .blog-card .btn--ghost { align-self: flex-end; }
+
+        /* ----- CONTACT (optional) ----- */
+        .contact {
+            background: #FFFFFF;
+            border-radius: 40px;
+            padding: 3.5rem 2.5rem;
+            margin: 3rem 0 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(229, 231, 235, 0.4);
             text-align: center;
-            background-color: #f4f4f9;
-            color: #333;
         }
-        h1 {
-            color: #2c3e50;
+        .contact h2 { font-size: 2rem; font-weight: 600; letter-spacing: -0.02em; color: #111827; }
+        .contact p { color: #6B7280; font-size: 1.1rem; margin: 0.5rem 0 2rem; }
+        .contact__links { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+        .contact__links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: #F8F9FC;
+            padding: 0.6rem 1.6rem;
+            border-radius: 60px;
+            font-weight: 500;
+            color: #111827;
+            text-decoration: none;
+            border: 1px solid #E5E7EB;
+            transition: all 0.15s ease;
         }
-        .success-box {
-            background-color: white;
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            border-left: 5px solid #28a745;
+        .contact__links a:hover {
+            background: rgba(124, 58, 237, 0.06);
+            border-color: #7C3AED;
+            transform: scale(1.02);
         }
-        .emoji-big {
-            font-size: 48px;
+        .contact__links a i { color: #7C3AED; }
+
+        /* ----- FOOTER ----- */
+        footer {
+            text-align: center;
+            padding: 2.5rem 0 2rem;
+            color: #9CA3AF;
+            font-size: 0.9rem;
+            border-top: 1px solid #E5E7EB;
+            margin-top: 1rem;
         }
-        .footer {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #777;
+        footer span { color: #7C3AED; }
+
+        /* ----- UTILITY & RESPONSIVE ----- */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+        .delay-1 { animation-delay: 0.05s; }
+        .delay-2 { animation-delay: 0.1s; }
+        .delay-3 { animation-delay: 0.15s; }
+        .delay-4 { animation-delay: 0.2s; }
+
+        @media (max-width: 700px) {
+            .hero h1 { font-size: 2.4rem; }
+            .hero__sub { font-size: 1rem; }
+            .contact { padding: 2rem 1.2rem; }
+            .blog__grid { grid-template-columns: 1fr; }
+            .lang-switch-wrap { justify-content: center; }
+        }
+        @media (max-width: 480px) {
+            .container { padding: 0 1rem; }
+            .hero { padding: 2rem 0 2rem; }
         }
     </style>
 </head>
 <body>
-    <div class="success-box">
-        <p class="emoji-big">🚀</p>
-        <h1>It's Working Abbas!</h1>
-        <p>Your GitHub Pages site is successfully deployed.</p>
-        <p>This is a test page for:</p>
-        <code style="background: #eee; padding: 4px 8px; border-radius: 4px;">
-            https://abbasalirezaei.github.io/your-repo-name
-        </code>
-        <p style="margin-top: 20px;">🎉 You can now replace this file with your own website content.</p>
-    </div>
-    <div class="footer">
-        Created with ❤️ using GitHub Pages
-    </div>
+    <main class="container">
+
+        <!-- LANGUAGE SWITCH -->
+        <div class="lang-switch-wrap">
+            <div class="lang-switch">
+                <button type="button" data-lang="en" class="active">EN</button>
+                <button type="button" data-lang="fa">فا</button>
+            </div>
+        </div>
+
+        <!-- HERO -->
+        <section class="hero fade-up">
+            <div class="hero__badge" data-i18n="badge">Articles · Insights · Tech</div>
+            <h1 data-i18n-html="heroTitle">My <span>Blog</span></h1>
+            <p class="hero__sub" data-i18n="heroSub">Ideas, tutorials, and stories from my work in tech, engineering, and education.</p>
+            <div class="hero__actions">
+                <a href="#blog" class="btn btn--primary"><i class="fas fa-arrow-right" style="font-size:0.8rem;"></i> <span data-i18n="exploreBtn">Read Articles</span></a>
+                <a href="#contact" class="btn btn--secondary" data-i18n="contactBtn">Contact</a>
+            </div>
+        </section>
+
+        <!-- BLOG SECTION -->
+        <section id="blog" class="blog">
+            <div class="blog__header fade-up delay-1">
+                <h2 data-i18n="blogHeading">Latest posts</h2>
+                <p data-i18n="blogSub">Click through to read the full article on LinkedIn.</p>
+            </div>
+
+            <div class="blog__grid" id="blogGrid">
+                <!-- cards injected by JS -->
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="contact fade-up delay-4">
+            <h2 data-i18n="contactHeading">Let's connect</h2>
+            <p data-i18n="contactSub">Follow me on LinkedIn for more articles and updates.</p>
+            <div class="contact__links">
+                <a href="mailto:abbasali@rezaeiabbas.ir"><i class="fas fa-envelope"></i> <span data-i18n="email">Email</span></a>
+                <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+                <a href="#" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                <a href="#" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <p><span data-i18n="footerCopy">&copy; 2026</span> <span>Abbasali Rezaei</span> · <span data-i18n="footerRole">ICT Engineer</span></p>
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            // ---- BLOG DATA (LinkedIn articles) ----
+            const blogPosts = [
+                {
+                    id: 'post1',
+                    image: 'https://placehold.co/600x400/7C3AED/FFFFFF?text=Network+Design', // replace with real image URL if needed
+                    titleEn: 'Modern Network Design for SMBs',
+                    titleFa: 'طراحی شبکه مدرن برای کسب‌وکارهای کوچک',
+                    descEn: 'Practical approaches to building resilient, secure, and cost-effective networks for small and medium businesses.',
+                    descFa: 'روش‌های عملی برای ساخت شبکه‌های مقاوم، امن و مقرون‌به‌صرفه برای کسب‌وکارهای کوچک و متوسط.',
+                    dateEn: 'May 12, 2026',
+                    dateFa: '۲۲ اردیبهشت ۱۴۰۵',
+                    linkedinUrl: 'https://www.linkedin.com/pulse/modern-network-design-smbs-abbasali-rezaei/'
+                },
+                {
+                    id: 'post2',
+                    image: 'https://placehold.co/600x400/8B5CF6/FFFFFF?text=Python+Backend',
+                    titleEn: 'Building High-Performance APIs with FastAPI',
+                    titleFa: 'ساخت APIهای پرسرعت با FastAPI',
+                    descEn: 'A deep dive into async Python, dependency injection, and best practices for production-ready APIs.',
+                    descFa: 'بررسی عمیق پایتون ناهمگام، تزریق وابستگی و بهترین روش‌ها برای APIهای آماده تولید.',
+                    dateEn: 'April 28, 2026',
+                    dateFa: '۸ اردیبهشت ۱۴۰۵',
+                    linkedinUrl: 'https://www.linkedin.com/pulse/high-performance-apis-fastapi-abbasali-rezaei/'
+                },
+                {
+                    id: 'post3',
+                    image: 'https://placehold.co/600x400/7C3AED/FFFFFF?text=CCTV+Security',
+                    titleEn: 'CCTV Surveillance: From Planning to Maintenance',
+                    titleFa: 'دوربین مداربسته: از برنامه‌ریزی تا نگهداری',
+                    descEn: 'Complete guide to designing and maintaining CCTV systems for homes, offices, and industrial sites.',
+                    descFa: 'راهنمای کامل طراحی و نگهداری سیستم‌های دوربین مداربسته برای منازل، دفاتر و تأسیسات صنعتی.',
+                    dateEn: 'April 10, 2026',
+                    dateFa: '۲۱ فروردین ۱۴۰۵',
+                    linkedinUrl: 'https://www.linkedin.com/pulse/cctv-surveillance-planning-maintenance-abbasali-rezaei/'
+                },
+                {
+                    id: 'post4',
+                    image: 'https://placehold.co/600x400/8B5CF6/FFFFFF?text=Math+Tutoring',
+                    titleEn: 'Teaching Mathematics: Bridging Theory and Practice',
+                    titleFa: 'آموزش ریاضی: پل زدن بین تئوری و عمل',
+                    descEn: 'How I approach math tutoring to build intuition, problem-solving skills, and confidence in students.',
+                    descFa: 'رویکرد من به تدریس ریاضی برای ایجاد شهود، مهارت حل مسئله و اعتمادبه‌نفس در دانش‌آموزان.',
+                    dateEn: 'March 22, 2026',
+                    dateFa: '۲ فروردین ۱۴۰۵',
+                    linkedinUrl: 'https://www.linkedin.com/pulse/teaching-mathematics-bridging-theory-practice-abbasali-rezaei/'
+                },
+                {
+                    id: 'post5',
+                    image: 'https://placehold.co/600x400/7C3AED/FFFFFF?text=IT+Consulting',
+                    titleEn: 'IT Consulting in the Age of Digital Transformation',
+                    titleFa: 'مشاوره IT در عصر تحول دیجیتال',
+                    descEn: 'Strategic advice for aligning technology with business goals, with real-world case studies.',
+                    descFa: 'توصیه‌های راهبردی برای همسوسازی فناوری با اهداف کسب‌وکار، همراه با مطالعات موردی واقعی.',
+                    dateEn: 'March 5, 2026',
+                    dateFa: '۱۵ اسفند ۱۴۰۴',
+                    linkedinUrl: 'https://www.linkedin.com/pulse/it-consulting-age-digital-transformation-abbasali-rezaei/'
+                }
+            ];
+
+            // ---- TRANSLATIONS ----
+            const translations = {
+                en: {
+                    pageTitle: 'Blog · Abbasali Rezaei',
+                    badge: 'Articles · Insights · Tech',
+                    heroSub: 'Ideas, tutorials, and stories from my work in tech, engineering, and education.',
+                    exploreBtn: 'Read Articles',
+                    contactBtn: 'Contact',
+                    blogHeading: 'Latest posts',
+                    blogSub: 'Click through to read the full article on LinkedIn.',
+                    contactHeading: 'Let\'s connect',
+                    contactSub: 'Follow me on LinkedIn for more articles and updates.',
+                    email: 'Email',
+                    footerCopy: '© 2026',
+                    footerRole: 'ICT Engineer',
+                    readFull: 'Read on LinkedIn →'
+                },
+                fa: {
+                    pageTitle: 'وبلاگ · عباسعلی رضایی',
+                    badge: 'مقالات · دیدگاه‌ها · فناوری',
+                    heroSub: 'ایده‌ها، آموزش‌ها و داستان‌هایی از کار من در فناوری، مهندسی و آموزش.',
+                    exploreBtn: 'مطالعه مقالات',
+                    contactBtn: 'تماس',
+                    blogHeading: 'آخرین نوشته‌ها',
+                    blogSub: 'برای مطالعه کامل مقاله روی لینک کلیک کنید.',
+                    contactHeading: 'بیایید در ارتباط باشیم',
+                    contactSub: 'برای مقالات و به‌روزرسانی‌های بیشتر در لینکدین دنبال کنید.',
+                    email: 'ایمیل',
+                    footerCopy: '© ۲۰۲۶',
+                    footerRole: 'مهندس ICT',
+                    readFull: 'مطالعه در لینکدین →'
+                }
+            };
+
+            const heroTitleHTML = {
+                en: 'My <span>Blog</span>',
+                fa: 'وبلاگ <span>من</span>'
+            };
+
+            let currentLang = 'en';
+
+            function renderBlog(lang) {
+                const container = document.getElementById('blogGrid');
+                if (!container) return;
+                const t = translations[lang];
+                container.innerHTML = blogPosts.map(post => {
+                    const title = lang === 'fa' ? post.titleFa : post.titleEn;
+                    const desc = lang === 'fa' ? post.descFa : post.descEn;
+                    const date = lang === 'fa' ? post.dateFa : post.dateEn;
+                    const img = post.image; // placeholder or real image
+                    return `
+                        <div class="blog-card fade-up">
+                            <div class="blog-card__image">
+                                <img src="${img}" alt="${title}" loading="lazy">
+                            </div>
+                            <h3>${title}</h3>
+                            <div class="meta"><i class="far fa-calendar-alt"></i> ${date}</div>
+                            <p>${desc}</p>
+                            <a href="${post.linkedinUrl}" target="_blank" class="btn btn--ghost" style="align-self:flex-start;">
+                                <i class="fas fa-external-link-alt" style="margin-right:6px;font-size:0.8rem;"></i> ${t.readFull}
+                            </a>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            function applyLanguage(lang) {
+                currentLang = lang;
+                const dict = translations[lang];
+                document.documentElement.lang = lang;
+                document.documentElement.dir = lang === 'fa' ? 'rtl' : 'ltr';
+                document.title = dict.pageTitle;
+
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    const value = dict[key];
+                    if (value !== undefined) el.textContent = value;
+                });
+
+                document.querySelectorAll('[data-i18n-html]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-html');
+                    if (key === 'heroTitle') el.innerHTML = heroTitleHTML[lang];
+                });
+
+                document.querySelectorAll('.lang-switch button').forEach(btn => {
+                    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+                });
+
+                renderBlog(lang);
+            }
+
+            // ---- switch listeners ----
+            document.querySelectorAll('.lang-switch button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    applyLanguage(this.getAttribute('data-lang'));
+                });
+            });
+
+            // ---- init ----
+            applyLanguage('en');
+        })();
+    </script>
 </body>
 </html>
